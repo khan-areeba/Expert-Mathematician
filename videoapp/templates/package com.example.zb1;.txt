@@ -1,0 +1,96 @@
+package com.example.zb1;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.database.Cursor;
+import android.content.ContentValues;
+
+public class DBHelper extends SQLiteOpenHelper {
+
+    private static final String DATABASE_NAME = "85DB";
+    private static final int DATABASE_VERSION = 1;
+
+    // Table Names
+    private static final String TABLE_PRODUCTS = "Products";
+    private static final String TABLE_INVOICE = "Invoice";
+
+    // Common Column Names
+    private static final String COLUMN_ID = "ProdctId";
+    private static final String COLUMN_QTY = "Qty";
+
+    // Products Table Columns
+    private static final String COLUMN_NAME = "ProdcutName";
+    private static final String COLUMN_CATEGORY = "Category";
+    private static final String COLUMN_PRICE = "Price";
+
+    // Invoice Table Columns
+    private static final String COLUMN_INVOICE_ID = "InvoiceId";
+    private static final String COLUMN_TOTAL = "total";
+
+    public DBHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        // Create Products Table
+        String CREATE_PRODUCTS_TABLE = "CREATE TABLE " + TABLE_PRODUCTS + " ("
+                + COLUMN_ID + " TEXT PRIMARY KEY,"
+                + COLUMN_NAME + " TEXT,"
+                + COLUMN_CATEGORY + " TEXT,"
+                + COLUMN_PRICE + " INTEGER,"
+                + COLUMN_QTY + " INTEGER)";
+
+        // Create Invoice Table
+        String CREATE_INVOICE_TABLE = "CREATE TABLE " + TABLE_INVOICE + " ("
+                + COLUMN_INVOICE_ID + " TEXT PRIMARY KEY,"
+                + COLUMN_ID + " TEXT,"
+                + COLUMN_QTY + " INTEGER,"
+                + COLUMN_TOTAL + " INTEGER)";
+        db.execSQL(CREATE_INVOICE_TABLE);
+    }
+        db.execSQL(CREATE_PRODUCTS_TABLE);
+
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Drop older tables if they exist
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_INVOICE);
+        onCreate(db);
+    }
+
+    // Function to Insert Product
+    public boolean insertProduct(String id, String name, String category, int price, int qty) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_ID, id);
+        values.put(COLUMN_NAME, name);
+        values.put(COLUMN_CATEGORY, category);
+        values.put(COLUMN_PRICE, price);
+        values.put(COLUMN_QTY, qty);
+
+        long result = db.insert(TABLE_PRODUCTS, null, values);
+        return result != -1; // Returns true if inserted successfully
+    }
+
+    // Function to Fetch Product by ID
+    public Cursor getProduct(String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + COLUMN_ID + "=?", new String[]{id});
+    }
+
+    // Function to Insert Invoice
+    public boolean insertInvoice(String invoiceId, String productId, int qty, int total) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_INVOICE_ID, invoiceId);
+        values.put(COLUMN_ID, productId);
+        values.put(COLUMN_QTY, qty);
+        values.put(COLUMN_TOTAL, total);
+
+        long result = db.insert(TABLE_INVOICE, null, values);
+        return result != -1;
+    }
+}

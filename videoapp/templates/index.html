@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expert Mathematician</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap');
+
+    :root {
+      --primary-bg: black;
+      --sidebar-bg: #1e1e1e;
+      --button-bg: #ff758c;
+      --button-hover-bg: #ff5274;
+      --text-gradient: linear-gradient(90deg, #ff7eb3, #ff5274);
+      --response-bg: rgba(255, 255, 255, 0.95);
+      --text-color: white;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--primary-bg);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: all 0.4s ease-in-out;
+    }
+
+    .top-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #111;
+      padding: 15px 20px;
+      font-size: 22px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .top-nav span {
+      background: var(--text-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-family: 'Pacifico', cursive;
+      font-size: 26px;
+      letter-spacing: 2px;
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+      height: 100vh;
+      max-width: 10000px;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: var(--sidebar-bg);
+      color: white;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+      box-shadow: 3px 0 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar button {
+      background: #444;
+      border: none;
+      color: white;
+      padding: 15px;
+      text-align: left;
+      cursor: pointer;
+      width: 100%;
+      margin: 5px 0;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 10px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .sidebar button:hover {
+      background: #ff758c;
+      transform: translateX(5px);
+      box-shadow: 4px 4px 10px rgba(255, 117, 140, 0.5);
+    }
+
+    .content {
+      margin-left: 260px;
+      display: flex;
+      flex: 1;
+      padding: 20px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .video-container,
+    .speech-container {
+      flex: 3;
+      border-radius: 15px;
+      height: 80vh;
+      width: 70%;
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .video-container {
+      background-color: var(--sidebar-bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .speech-container {
+      background-color: var(--sidebar-bg);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .speech-container textarea {
+      width: 80%;
+      height: 60%;
+      font-size: 20px;
+      border-radius: 10px;
+      padding: 10px;
+      resize: none;
+    }
+
+    .response-container {
+      flex: 1;
+      background: var(--response-bg);
+      padding: 20px;
+      border-radius: 15px;
+      margin: 0px 20px;
+      box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
+      height: 80vh;
+      font-size: 16px;
+      color: black;
+      text-align: center;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .export-btn {
+      position: sticky;
+      bottom: 0;
+      background: var(--button-bg);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .export-btn:hover {
+      background: var(--button-hover-bg);
+    }
+
+    .disabled button {
+      background: #444;
+      color: #bbb;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    
+    footer {
+      text-align: center;
+      font-size: 14px;
+      color: #fff;
+      padding: 10px;
+    }
+
+  .about-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 90vh;
+}
+
+/* Custom scrollbar for Chrome, Edge, and Safari */
+.about-card::-webkit-scrollbar {
+    width: 8px;
+}
+
+.about-card::-webkit-scrollbar-thumb {
+    background: #ff758c;
+    border-radius: 10px;
+}
+
+.about-card::-webkit-scrollbar-track {
+    background: #333;
+}
+
+.about-card {
+    background: #222;
+    color: white;
+    padding: 40px;
+    max-width: 900px; /* Increased width */
+    height: 85vh; /* Increased height */
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    scrollbar-width: thin; 
+    scrollbar-color: #ff758c #333;
+}
+
+.about-title {
+    font-size: 30px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #ff7eb3, #ff5274);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
+}
+.about-title span {
+    font-style: italic;
+}
+
+.about-description {
+    font-size: 18px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.highlight {
+    color: #ff758c;
+    font-weight: bold;
+}
+
+.about-icons {
+    font-size: 16px;
+    margin-top: 15px;
+    font-weight: bold;
+    opacity: 0.9;
+}
+
+/* Features Section */
+.about-features {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.feature {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.feature h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: #ff758c;
+}
+
+.feature p {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.feature:hover {
+    transform: scale(1.05);
+}
+
+/* Mission Section */
+.about-mission {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.about-mission h3 {
+    font-size: 22px;
+    color: #ff5274;
+    margin-bottom: 5px;
+}
+
+.about-mission p {
+    font-size: 17px;
+}
+
+/* CTA Section */
+.cta-section {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.cta-section h3 {
+    font-size: 22px;
+    color: #ff5274;
+}
+
+.cta-section p {
+    font-size: 17px;
+}
+
+.cta-button {
+    background: #ff5274;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.cta-button:hover {
+    background: #ff758c;
+    transform: scale(1.05);
+}
+
+.back-btn {
+    background: #ff5274;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s ease-in-out;
+}
+
+.back-btn:hover {
+    background: #ff758c;
+    transform: scale(1.05);
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+  </style>
+
+  <script>
+    // Global variable to hold the SpeechRecognition instance.
+    var recognition = null;
+    // Global variable to track active mode ("gesture" or "speech")
+    var activeMode = "gesture";
+
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === name + "=") {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    // Fetch hand gesture solution (for gesture mode)
+    function fetchResponse() {
+      fetch("/get_response")
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.response) {
+            document.getElementById("response").innerHTML =
+              "<h2>Solution:</h2><p>" + data.response + "</p>";
+          }
+        })
+        .catch((error) => console.error("Error fetching response:", error));
+    }
+
+    // Export function uses the active mode to construct the export URL.
+    function exportToWord() {
+      // Debug log the current active mode.
+      console.log("Exporting solution for mode:", activeMode);
+      window.location.href = "/export_to_word/?mode=" + activeMode;
+    }
+
+    // Activate Speech Mode: Hide video container, show speech container, set activeMode.
+    function activateSpeechMode() {
+      activeMode = "speech";
+      console.log("Switched to Speech Mode");
+      document.getElementById("videoContainer").style.display = "none";
+      document.getElementById("speechCanvas").style.display = "flex";
+      startSpeechRecognition();
+    }
+
+    // Activate Gesture Mode: Hide speech container, show video container, stop recognition.
+    function activateGestureMode() {
+      activeMode = "gesture";
+      console.log("Switched to Gesture Mode");
+      document.getElementById("speechCanvas").style.display = "none";
+      document.getElementById("videoContainer").style.display = "flex";
+      if (recognition) {
+        recognition.stop();
+        recognition = null;
+      }
+    }
+
+    // Start Speech Recognition and update the textarea with the final recognized text.
+    function startSpeechRecognition() {
+      var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Speech recognition is not supported in this browser.");
+        return;
+      }
+      recognition = new SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.interimResults = false;
+      recognition.continuous = false;
+      recognition.onresult = function (event) {
+        const transcript = event.results[0][0].transcript;
+        console.log("Speech recognized:", transcript);
+        document.getElementById("speechText").value = transcript;
+        recognition.stop();
+      };
+      recognition.onerror = function (event) {
+        console.error("Speech recognition error:", event.error);
+      };
+      recognition.start();
+    }
+
+    // When Solve is clicked, send the speech text to the server.
+    function solveSpeechEquation() {
+      var equationText = document.getElementById("speechText").value;
+      if (equationText.trim() === "") {
+        alert("Please say an equation first.");
+        return;
+      }
+      fetch("/speech_input/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": getCookie("csrftoken")
+        },
+        body: "speech_equation=" + encodeURIComponent(equationText)
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.solution) {
+            document.getElementById("response").innerHTML =
+              "<h2>Solution:</h2><p>" + data.solution + "</p>";
+          } else {
+            document.getElementById("response").innerHTML =
+              "<h2>Error:</h2><p>" + data.error + "</p>";
+          }
+        })
+        .catch((error) => console.error("Error fetching speech solution:", error));
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("speechInput").addEventListener("click", function () {
+        activateSpeechMode();
+      });
+      document.getElementById("gestureMode").addEventListener("click", function () {
+        activateGestureMode();
+      });
+      document.getElementById("solveSpeech").addEventListener("click", function () {
+        solveSpeechEquation();
+      });
+document.getElementById("aboutUsBtn").addEventListener("click", showAboutUs);
+    });
+
+// Clears the solution response when switching modes
+function clearResponse() {
+    document.getElementById("response").innerHTML = "<h2>Solution:</h2>";
+}
+
+// Activate Speech Mode: Hide video container, show speech container, set activeMode, clear response
+function activateSpeechMode() {
+    activeMode = "speech";
+    console.log("Switched to Speech Mode");
+    document.getElementById("videoContainer").style.display = "none";
+    document.getElementById("speechCanvas").style.display = "flex";
+    document.getElementById("response-container").style.display = "block"; // Show response panel
+    document.getElementById("aboutUsSection").style.display = "none"; // Hide About Us
+    document.getElementById("tutorialVideoSection").style.display = "none";
+    clearResponse();  // Clear previous solution
+    startSpeechRecognition();
+}
+
+// Activate Gesture Mode: Hide speech container, show video container, stop recognition, clear response
+function activateGestureMode() {
+    activeMode = "gesture";
+    console.log("Switched to Gesture Mode");
+    document.getElementById("speechCanvas").style.display = "none";
+    document.getElementById("videoContainer").style.display = "flex";
+    document.getElementById("response-container").style.display = "block"; // Show response panel
+    document.getElementById("aboutUsSection").style.display = "none"; // Hide About Us
+    document.getElementById("tutorialVideoSection").style.display = "none";
+    clearResponse();  // Clear previous solution
+    if (recognition) {
+        recognition.stop();
+        recognition = null;
+    }
+}
+
+function showAboutUs() {
+    console.log("Switched to About Us Page");
+
+    // Hide all other sections
+    document.getElementById("videoContainer").style.display = "none";
+    document.getElementById("speechCanvas").style.display = "none";
+    document.getElementById("response-container").style.display = "none";
+    document.getElementById("tutorialVideoSection").style.display = "none"; // Hide Tutorials
+
+    // Show the About Us section
+    document.getElementById("aboutUsSection").style.display = "flex";
+}
+
+function hideAboutUs() {
+    console.log("Returning to main mode");
+    document.getElementById("aboutUsSection").style.display = "none";
+    document.getElementById("response-container").style.display = "block";
+}
+
+function showTutorialVideos() {
+    console.log("Switched to Tutorial Videos");
+
+    // Hide all other sections
+    document.getElementById("videoContainer").style.display = "none";
+    document.getElementById("speechCanvas").style.display = "none";
+    document.getElementById("response-container").style.display = "none";
+    document.getElementById("aboutUsSection").style.display = "none"; // Hide About Us
+
+    // Show the tutorial section (Make sure this element exists)
+    document.getElementById("tutorialVideoSection").style.display = "flex";
+}
+
+function hideTutorialVideos() {
+    console.log("Returning from Tutorial Videos");
+    document.getElementById("tutorialVideoSection").style.display = "none";
+    document.getElementById("response-container").style.display = "block";
+}
+
+
+function sendToBackend(mathExpression) {
+    fetch('/process_speech/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ equation: mathExpression })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.solution) {
+            document.getElementById("response").innerHTML = `<h2>Solution:</h2><p>${data.solution}</p>`;
+        } else {
+            document.getElementById("response").innerHTML = `<h2>Solution:</h2><p>Error in solving the equation.</p>`;
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
+
+
+    // Poll for gesture solution only (if in gesture mode)
+    setInterval(function () {
+      if (activeMode === "gesture") {
+        fetchResponse();
+      }
+    }, 1000);
+  </script>
+</head>
+<body>
+  <div class="top-nav">
+    <span>EXPERT MATHEMATICIAN</span>
+  </div>
+
+  <div class="container">
+    <div class="sidebar">
+      <button id="gestureMode">Gesture Mode</button>
+      <button id="speechInput">Speech Input</button>
+      <button id="tutorialBtn" onclick="showTutorialVideos()">Tutorial</button>
+      <button id="aboutUsBtn">About</button> <!-- Updated button with an ID -->
+
+    <div class="upcoming-title">🚀 Upcoming Features
+    <div class="disabled">
+        <button>✍️ Air Writing Mode (Coming Soon)</button>
+    </div>
+</div>
+</div>
+
+    <div class="content">
+      <!-- Video Container (for hand gestures) -->
+      <div class="video-container" id="videoContainer">
+        <img src="{% url 'video_feed' %}" alt="Video Feed" style="width: 100%; height: 100%; border-radius: 15px;" />
+      </div>
+
+      <!-- Speech Container (initially hidden) -->
+      <div class="speech-container" id="speechCanvas">
+        <textarea id="speechText" placeholder="Your spoken equation will appear here..."></textarea>
+        <button id="solveSpeech" class="button" style="margin-top: 20px;">Solve</button>
+      </div>
+
+{% load static %}
+
+<div id="tutorialVideoSection" class="about-container" style="display: none;">
+    <div class="about-card">
+        <h2 class="about-title">Tutorial Videos</h2>
+        
+        <video width="100%" controls>
+            <source src="{% static 'videos/1.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <br>
+
+        <video width="100%" controls>
+            <source src="{% static 'videos/2.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <br>
+
+        <video width="100%" controls>
+            <source src="{% static 'videos/3.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <br>
+
+    </div>
+</div>
+
+
+
+      <!-- About Us Section (Initially Hidden) -->
+<div class="about-container" id="aboutUsSection" style="display: none;">
+    <div class="about-card">
+        <h2 class="about-title">Welcome to <span>Expert Mathematician</span></h2>
+        <p class="about-description">
+            🚀 At Expert Mathematician, we believe that math should be interactive, engaging, and accessible to all.  
+            Our AI-powered platform revolutionizes the way you solve math problems using:  
+        </p>
+
+        <!-- Features Section -->
+        <div class="about-features">
+            <div class="feature">
+                <h3>🖐 Gesture-Based Solving</h3>
+                <p>Use your hand gestures to write equations and let AI solve them in real time.</p>
+            </div>
+            <div class="feature">
+                <h3>🎤 Speech Recognition</h3>
+                <p>Simply speak your math problems, and our AI will **convert them to equations and solve them instantly**.</p>
+            </div>
+            <div class="feature">
+                <h3>🖊️ Air Writing</h3>
+                <p>Write in the air with an invisible pen, and our AI will detect your handwriting effortlessly.</p>
+            </div>
+        </div>
+
+        <!-- Our Mission -->
+        <div class="about-mission">
+            <h3>🌍 Our Mission</h3>
+            <p>
+                We aim to bridge the gap between technology and education, making math learning intuitive** for students, teachers, and professionals.  
+            </p>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="cta-section">
+            <h3>📢 Join Us!</h3>
+            <p>Be part of our journey! Try our **AI-powered math solver** and experience future of learning today.</p>
+        </div>
+    </div>
+</div>
+
+
+      <!-- Response Panel with sticky Export button -->
+      <div class="response-container" id="response-container">
+        <div id="response">
+          <h2>Solution:</h2>
+        </div>
+        <button class="export-btn" onclick="exportToWord()">Export to Word</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 Expert Mathematician. All Rights Reserved.
+  </footer>
+</body>
+</html>

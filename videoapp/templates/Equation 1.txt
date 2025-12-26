@@ -1,0 +1,12 @@
+Equation 1
+A 150 m long bus moving at a speed of 72 km/hr passes a woman waiting at a bus stop. Calculate the time taken by the bus to pass the woman.
+
+
+Equation 2
+A boatman can row a boat upstream at 10 km/hr and downstream at 16 km/hr. Find the speed of the boat in still water and the speed of the stream.
+
+Equation 3
+A 100 m long train moving at a speed of 60 km/hr passes a man standing on the pavement near a railway track. Find the time taken by the train to pass the man.
+
+Equation 4
+How long does a train 1000 m long moving at a speed of 90 km/hr would take to pass through a 500 m long bridge?
